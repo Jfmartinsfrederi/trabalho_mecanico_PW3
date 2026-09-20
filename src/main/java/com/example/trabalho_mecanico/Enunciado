@@ -1,0 +1,37 @@
+Avaliação 3, parte 1
+Crie um projeto, como o visto na aula de hoje, para persistir dados de
+um conserto de um carro (método POST), em um BD.
+Seu projeto deverá ter as seguintes classes:
+Veiculo
+Marca / Modelo / Ano
+Mecanico
+Nome / Anos de experiência
+Conserto
+Data de entrada na oficina
+Data de saída da oficina
+Mecânico responsável (classe Mecanico)
+Veículo (classe Veiculo)
+Veiculo e Mecanico “embedded” em Conserto (como visto na aula)
+Datas podem ser apenas Strings
+Obrigatório usar SGBD H2
+Obrigatório usar Lombok e Flyway
+
+
+Avaliação 3 parte 2
+Retome o projeto pedido na parte 1.
+Realize a validação dos dados enviados:
+datas: formato “xx/xx/xxxx”
+OBS: só o formato, não precisa se preocupar com número de dias,
+ano bissexto... (isto é, uma expressão regular simples dá conta!)
+Dados obrigatórios:
+nome do mecânico
+marca do veículo
+modelo do veículo
+ano do veículo, no formato “xxxx”
+ Crie uma nova “migration” para inserir o campo “cor” no Veículo
+será um campo não obrigatório
+Crie na API duas repostas para a requisição GET:
+retornando todos os dados (com recurso de paginação, não precisa
+configurar pageabledefault)
+retornando apenas as datas, o nome do mecânico,a marca e o modelo
+do veículo (sem paginação)
