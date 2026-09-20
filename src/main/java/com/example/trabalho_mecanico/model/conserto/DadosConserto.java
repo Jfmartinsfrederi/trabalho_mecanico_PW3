@@ -6,7 +6,7 @@ import com.example.trabalho_mecanico.model.veiculo.DadosVeiculo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+
 
 import java.time.LocalDate;
 

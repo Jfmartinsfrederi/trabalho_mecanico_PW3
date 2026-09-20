@@ -3,8 +3,6 @@ package com.example.trabalho_mecanico.controller;
 import com.example.trabalho_mecanico.model.conserto.Conserto;
 import com.example.trabalho_mecanico.model.conserto.DadosConserto;
 import com.example.trabalho_mecanico.model.conserto.SimpleViewConserto;
-import com.example.trabalho_mecanico.model.mecanico.DadosMecanico;
-import com.example.trabalho_mecanico.model.mecanico.Mecanico;
 import com.example.trabalho_mecanico.services.GerenciarConsertoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
