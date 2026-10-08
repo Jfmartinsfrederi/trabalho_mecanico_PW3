@@ -35,3 +35,27 @@ retornando todos os dados (com recurso de paginação, não precisa
 configurar pageabledefault)
 retornando apenas as datas, o nome do mecânico,a marca e o modelo
 do veículo (sem paginação)
+
+ Retome o projeto realizado nas duas partes anteriores.
+ Fazer como visto na aula de hoje !
+
+Crie uma nova migration para o banco de dados,
+para incluir o campo ‘ativo’, que permitirá uma exclusão lógica.
+
+Altere a listagem de consertos (dados parciais) realizada na etapa
+anterior para que inclua o ID do conserto.
+ Este método deverá também exibir apenas os consertos “ativos”,
+com base no campo ativo inserido anteriormente.
+ Implica mexer no repository, como vimos em aula ...
+
+ Crie um método para recuperar os dados de um único conserto,
+informando o ID na url.
+
+ Crie um método para alterar apenas os seguintes dados:
+ data de saída / nome do mecânico / anos experiência do mecânico
+
+ Crie um método para realizar a exclusão lógica de um conserto
+ campo ‘ativo’ = false
+ Utilizar ResponseEntity para retornar respostas HTTP adequadas
+em todos os endpoints.
+

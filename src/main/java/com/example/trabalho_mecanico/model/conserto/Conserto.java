@@ -4,10 +4,7 @@ import com.example.trabalho_mecanico.model.mecanico.Mecanico;
 import com.example.trabalho_mecanico.model.veiculo.Veiculo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -17,13 +14,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode(of = "id")
 public class Conserto {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private LocalDate dataEntrada;
     private LocalDate dataSaida;
+    private boolean ativo;
     @Embedded
     private Mecanico mecanicoResponsavel;
     @Embedded
@@ -32,6 +31,7 @@ public class Conserto {
     public Conserto(DadosConserto dadosConserto) {
         this.dataEntrada = dadosConserto.dataEntrada();
         this.dataSaida = dadosConserto.dataSaida();
+        this.ativo=true;
         this.mecanicoResponsavel = new Mecanico(dadosConserto.mecanicoResponsavel());
         this.veiculo = new Veiculo(dadosConserto.veiculo());
     }
