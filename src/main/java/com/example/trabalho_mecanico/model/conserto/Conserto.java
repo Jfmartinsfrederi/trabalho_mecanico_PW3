@@ -2,6 +2,7 @@ package com.example.trabalho_mecanico.model.conserto;
 
 import com.example.trabalho_mecanico.model.mecanico.Mecanico;
 import com.example.trabalho_mecanico.model.veiculo.Veiculo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -20,7 +21,9 @@ public class Conserto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataEntrada;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataSaida;
     private boolean ativo;
     @Embedded

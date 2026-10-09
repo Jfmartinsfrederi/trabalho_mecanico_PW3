@@ -6,7 +6,7 @@ create table consertos(
     anos_exp int,
     marca VARCHAR(50) not null,
     modelo VARCHAR(50) not null,
-    ano_lancamento date not null,
+    ano_lancamento VARCHAR(4) not null,
     primary key (id)
 
 

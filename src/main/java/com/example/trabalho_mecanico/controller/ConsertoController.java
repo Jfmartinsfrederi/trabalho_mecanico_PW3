@@ -22,9 +22,9 @@ public class ConsertoController {
     private GerenciarConsertoService gerenciarConsertoService;
     @PostMapping
     @Transactional
-    public ResponseEntity<SimpleViewConserto> cadastrarConserto(@RequestBody @Valid DadosConserto dadosConserto,
-                                                                UriComponentsBuilder uriBuilder){
-        SimpleViewConserto viewConserto= gerenciarConsertoService.save(dadosConserto);
+    public ResponseEntity<PoucosDadosConserto> cadastrarConserto(@RequestBody @Valid DadosConserto dadosConserto,
+                                                                 UriComponentsBuilder uriBuilder){
+        PoucosDadosConserto viewConserto= gerenciarConsertoService.save(dadosConserto);
 
         URI uri = uriBuilder.path("/conserto/{id}").buildAndExpand(viewConserto.id()).toUri();
 
@@ -32,10 +32,10 @@ public class ConsertoController {
 
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<SimpleViewConsertoAlterado> alterarConserto(@RequestBody @Valid DadosConsertoAlterar dados){
-        SimpleViewConsertoAlterado consertoAlterado=gerenciarConsertoService.alterar(dados);
+    public ResponseEntity<PoucosDadosConsertoAlterado> alterarConserto(@PathVariable Long id, @RequestBody @Valid DadosConsertoAlterar dados){
+        PoucosDadosConsertoAlterado consertoAlterado=gerenciarConsertoService.alterar(id,dados);
         return ResponseEntity.ok(consertoAlterado);
 
     }
@@ -51,24 +51,28 @@ public class ConsertoController {
 
 
     @GetMapping
-    public Page<Conserto> returnAllConsertos(Pageable pageable){
-        return gerenciarConsertoService.returnAllConserto(pageable);
+    public ResponseEntity<Page<DadosConserto>> returnAllConsertos(Pageable pageable){
+        Page<DadosConserto> dadosConsertoPage= gerenciarConsertoService.returnAllConserto(pageable);
+        return ResponseEntity.ok(dadosConsertoPage);
     }
 
-    @GetMapping("/simpleview")
-    public List<SimpleViewConserto> simpleViewConsertos(){
-        return gerenciarConsertoService.returnAllConsertoSimpleView();
+    @GetMapping("/resumo")
+    public ResponseEntity<List<PoucosDadosConserto>> simpleViewConsertos(){
+        List<PoucosDadosConserto> poucosDadosConsertosList = gerenciarConsertoService.returnAllConsertoPoucosDados();
+        return ResponseEntity.ok(poucosDadosConsertosList);
     }
 
-    @GetMapping("/simpleviewativo")
-    public Page<SimpleViewConserto> returnAllConsertoAtivoSimpleView(@PageableDefault (size=10,sort={"id"})
+    @GetMapping("/ativos")
+    public ResponseEntity<Page<PoucosDadosConserto>> returnAllConsertoAtivoSimpleView(@PageableDefault (size=10,sort={"id"})
                                                                      Pageable pageable){
-        return gerenciarConsertoService.returnAllConsertoAtivoSimpleView(pageable);
+        Page<PoucosDadosConserto> poucosDadosConsertoPage =gerenciarConsertoService
+                .returnAllConsertoAtivoPoucosDados(pageable);
+        return ResponseEntity.ok(poucosDadosConsertoPage);
 
     }
 
-    @GetMapping("{id}") ResponseEntity<SimpleViewConserto> returnConsertoById (@PathVariable Long id){
-        SimpleViewConserto viewConserto = gerenciarConsertoService.returnConsertoById(id);
+    @GetMapping("{id}") ResponseEntity<PoucosDadosConserto> returnConsertoById (@PathVariable Long id){
+        PoucosDadosConserto viewConserto = gerenciarConsertoService.returnConsertoById(id);
         return ResponseEntity.ok(viewConserto);
 
     }

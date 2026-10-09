@@ -5,7 +5,10 @@ import com.example.trabalho_mecanico.repository.ConsertoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -15,52 +18,80 @@ public class GerenciarConsertoService {
     @Autowired
     private ConsertoRepository consertoRepository;
 
-    public SimpleViewConserto save(DadosConserto dadosConserto){
+    @Transactional
+    public PoucosDadosConserto save(DadosConserto dadosConserto){
+        if (dadosConserto.dataSaida().isBefore(dadosConserto.dataEntrada())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "A data de saída nao pode ser anterior a de entrada"
+            );
+        }
 
         Conserto conserto=consertoRepository.save(new Conserto(dadosConserto));
 
-        return new SimpleViewConserto(conserto);
+        return new PoucosDadosConserto(conserto);
     }
 
-    public SimpleViewConsertoAlterado alterar(DadosConsertoAlterar dadosAlterar){
-        Conserto conserto=consertoRepository.findById(dadosAlterar.id())
-                .orElseThrow(()-> new NoSuchElementException("Conserto não Encontrado"));
-        if (!(dadosAlterar.nome().isBlank())){
+    @Transactional
+    public PoucosDadosConsertoAlterado alterar(Long id, DadosConsertoAlterar dadosAlterar){
+        Conserto conserto=consertoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Conserto não encontrado"));
+
+
+        if (dadosAlterar.nome() != null) {
+            if (dadosAlterar.nome().isBlank()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O nome nao pode ficar em branco");
+            }
             conserto.getMecanicoResponsavel().setNome(dadosAlterar.nome());
         }
-        if (dadosAlterar.anosExp()>0){
+
+        if (dadosAlterar.anosExp() != null) {
+            if (dadosAlterar.anosExp() < 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Anos de experiencia não podem ser negativos");
+            }
             conserto.getMecanicoResponsavel().setAnosExp(dadosAlterar.anosExp());
         }
-        if (!dadosAlterar.dataSaida().isBefore(conserto.getDataEntrada())) {
+
+        if (dadosAlterar.dataSaida() != null) {
+            if (dadosAlterar.dataSaida().isBefore(conserto.getDataEntrada())) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "A data de saída nao pode ser anterior a de entrada"
+                );
+            }
             conserto.setDataSaida(dadosAlterar.dataSaida());
         }
 
-        return new SimpleViewConsertoAlterado(conserto);
+        return new PoucosDadosConsertoAlterado(conserto);
     }
 
+    @Transactional
     public void excluirComAtivoFalse(Long id){
         Conserto conserto=consertoRepository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("Conserto não Encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Conserto não encontrado"));
         conserto.setAtivo(false);
     }
 
-    public Page<Conserto> returnAllConserto(Pageable pageable){
-        return consertoRepository.findAll(pageable);
+    @Transactional(readOnly = true)
+    public Page<DadosConserto> returnAllConserto(Pageable pageable){
+        return consertoRepository.findAll(pageable).map(DadosConserto::new);
     }
-
-    public List<SimpleViewConserto> returnAllConsertoSimpleView(){
-        return consertoRepository.findAll().stream().map(SimpleViewConserto::new).toList();
+    @Transactional(readOnly = true)
+    public List<PoucosDadosConserto> returnAllConsertoPoucosDados(){
+        return consertoRepository.findAll().stream().map(PoucosDadosConserto::new).toList();
     }
-
-    public Page<SimpleViewConserto> returnAllConsertoAtivoSimpleView(Pageable pageable){
-        return consertoRepository.findAllByAtivoTrue(pageable).map(SimpleViewConserto::new);
+    @Transactional(readOnly = true)
+    public Page<PoucosDadosConserto> returnAllConsertoAtivoPoucosDados(Pageable pageable){
+        return consertoRepository.findAllByAtivoTrue(pageable).map(PoucosDadosConserto::new);
     }
-
-    public SimpleViewConserto returnConsertoById(Long id){
+    @Transactional(readOnly = true)
+    public PoucosDadosConserto returnConsertoById(Long id){
         Conserto conserto=consertoRepository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("Conserto não Encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Conserto não encontrado"));
 
-        return new SimpleViewConserto(conserto);
+        return new PoucosDadosConserto(conserto);
     }
 
 }

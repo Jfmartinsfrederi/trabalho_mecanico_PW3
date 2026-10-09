@@ -21,7 +21,7 @@ public class Veiculo {
     private String marca;
     private String modelo;
     private String cor;
-    private LocalDate anoLancamento;
+    private String anoLancamento;
 
     public Veiculo(DadosVeiculo dadosVeiculo) {
         this.marca = dadosVeiculo.marca();

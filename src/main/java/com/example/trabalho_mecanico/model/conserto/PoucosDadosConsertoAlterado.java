@@ -1,13 +1,16 @@
 package com.example.trabalho_mecanico.model.conserto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
-public record SimpleViewConsertoAlterado(
+public record PoucosDadosConsertoAlterado(
 
-                                 LocalDate dataSaida,
+        @JsonFormat(pattern = "dd/MM/yyyy")
+        LocalDate dataSaida,
                                  String nomeMecanico,
                                  int anosExp) {
-    public SimpleViewConsertoAlterado(Conserto conserto){
+    public PoucosDadosConsertoAlterado(Conserto conserto){
         this(
 
                 conserto.getDataSaida(),
